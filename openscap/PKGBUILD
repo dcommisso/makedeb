@@ -1,0 +1,29 @@
+# Maintainer: Domenico Commisso
+
+pkgname=openscap
+pkgver=1.3.6
+pkgrel=1
+
+pkgdesc="Open Source Security Compliance Solution"
+arch=('amd64')
+url="https://www.open-scap.org/"
+license=('GPL')
+
+depends=('libxslt1.1' 'libxmlsec1' 'libxmlsec1-openssl' 'librpm9' 'libgconf-2-4' 'libyaml-0-2')
+makedepends=('cmake' 'libdbus-1-dev' 'libdbus-glib-1-dev' 'libcurl4-openssl-dev' 'libgcrypt20-dev' 'libselinux1-dev' 'libxslt1-dev' 'libgconf2-dev' 'libacl1-dev' 'libblkid-dev' 'libcap-dev' 'libxml2-dev' 'libldap2-dev' 'libpcre3-dev' 'python3-dev' 'swig' 'libxml-parser-perl' 'libxml-xpath-perl' 'libperl-dev' 'libbz2-dev' 'librpm-dev' 'g++' 'libapt-pkg-dev' 'libyaml-dev' 'libxmlsec1-dev')
+
+source=("https://github.com/OpenSCAP/openscap/releases/download/$pkgver/$pkgname-$pkgver.tar.gz")
+sha512sums=('5e4d6c4addc15b2a0245b5caef80fda3020f1cac83ed4aa436ef3f1703d1d761060c931c2536fa68de7ad5bab002b79c8b2d1e5f7695d46249f4562f5a1569a0')
+
+build() {
+  cd "$pkgname-$pkgver"
+  mkdir build
+  cd build
+  cmake ../ -DPYTHON_SITE_PACKAGES_INSTALL_DIR=/usr/local/lib/python3.9/dist-packages -DCMAKE_INSTALL_PREFIX=/usr
+  make
+}
+
+package() {
+  cd "${pkgname}-${pkgver}/build"
+  make DESTDIR="${pkgdir}/" install
+}
