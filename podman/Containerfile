@@ -1,0 +1,9 @@
+FROM proget.makedeb.org/docker/makedeb/makedeb:debian-bullseye
+
+# fix broken permissions in original image
+RUN /bin/sh -c "chown -R makedeb . /home/makedeb"
+
+RUN /bin/sh -c "sudo mkdir /makedeb"
+RUN /bin/sh -c "sudo chown -R makedeb . /makedeb"
+
+CMD cp /makedeb/PKGBUILD /tmp && cd /tmp && makedeb -s --no-confirm && mv *.deb /makedeb
